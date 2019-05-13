@@ -1,0 +1,25 @@
+
+
+CREATE DATABASE test DEFAULT CHARACTER SET utf8;
+CREATE USER 'tester'@'localhost' IDENTIFIED BY 'passfail';
+GRANT ALL PRIVILEGES ON test.* TO 'tester'@'localhost';
+
+USE test;
+
+CREATE TABLE points 
+( 
+	id int NOT NULL AUTO_INCREMENT, 
+	x int, 
+	y int, 
+	PRIMARY KEY (id)
+);
+
+INSERT INTO points (x,y) VALUES (0,0);
+INSERT INTO points (x,y) VALUES (10,0);
+INSERT INTO points (x,y) VALUES (10,10);
+INSERT INTO points (x,y) VALUES (0,10);
+
+
+SELECT x,y FROM points;
+
+
