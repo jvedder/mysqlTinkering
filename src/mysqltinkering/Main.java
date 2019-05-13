@@ -16,6 +16,7 @@ import java.sql.Types;
 public final class Main
 {
 
+    // NOTE: Do not hard-code passwords as shown here
     private static final String CONN_STRING = "jdbc:mysql://localhost/test?user=tester&password=passfail&useSSL=false";
 
     public static void main(String[] args) throws Exception
@@ -59,26 +60,6 @@ public final class Main
             
             pstmt.close();
 
-            // stmt = conn.createStatement();
-            // sql = "INSERT INTO points (x,y) VALUES (5,5);";
-            // count = stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-            // if (count > 0)
-            // {
-            // rs = stmt.getGeneratedKeys();
-            // System.out.println("Keys:");
-            // while (rs.next())
-            // {
-            // int k = rs.getInt(1);
-            // System.out.println(k);
-            // }
-            // rs.close();
-            // }
-            // else
-            // {
-            // System.out.println("No Keys returned.");
-            // }
-            // stmt.close();
-
             System.out.println("### CREATE STATEMENT ");
             stmt = conn.createStatement();
             System.out.println("### EXECUTE QUERY:");
@@ -86,6 +67,19 @@ public final class Main
             rs = stmt.executeQuery(sql);
             
             System.out.println("### RESULT SET:");
+            printResultSet(rs);
+            if (rs != null) rs.close();
+            
+            stmt.close();
+            
+            
+            System.out.println("### CREATE STATEMENT 2");
+            stmt = conn.createStatement();
+            System.out.println("### EXECUTE QUERY 2:");
+            sql = "SELECT * FROM names";
+            rs = stmt.executeQuery(sql);
+            
+            System.out.println("### RESULT SET 2:");
             printResultSet(rs);
             if (rs != null) rs.close();
             
@@ -138,12 +132,13 @@ public final class Main
                     if (col > 1) System.out.print(",");
                     switch (md.getColumnType(col))
                     {
-                        case Types.BIT:
+
                         case Types.BOOLEAN:
                             boolean b = rs.getBoolean(col);
                             System.out.print(b);
                             break;
                         case Types.DOUBLE:
+                        case Types.REAL:
                             double d = rs.getDouble(col);
                             System.out.print(d);
                             break;
@@ -152,6 +147,7 @@ public final class Main
                             System.out.print(f);
                             break;  
                         case Types.INTEGER:
+                        case Types.BIT:
                             int i = rs.getInt(col);
                             System.out.print(i);
                             break; 
@@ -159,7 +155,8 @@ public final class Main
                             long l = rs.getLong(col);
                             System.out.print(l);
                             break; 
-                        case Types.NVARCHAR:
+                        case Types.CHAR:
+                        case Types.LONGVARCHAR:
                         case Types.VARCHAR:
                             String s = rs.getString(col);
                             System.out.print(s);
@@ -199,7 +196,7 @@ public final class Main
             for (int col = 1; col <= cols; col++)
             {
                 System.out.println();
-                System.out.println("COLUMN # " + cols);
+                System.out.println("COLUMN # " + col);
                 System.out.println("    CatalogName=" + md.getCatalogName(col));
                 System.out.println("    SchemaName=" + md.getSchemaName(col));
                 System.out.println("    TableName=" + md.getTableName(col));
@@ -213,9 +210,9 @@ public final class Main
                 System.out.println("    Scale=" + md.getScale(col));
                 System.out.println("    isAutoIncrement=" + md.isAutoIncrement(col));
                 System.out.println("    isCaseSensitive=" + md.isCaseSensitive(col));
-                System.out.println("    isCurrency" + md.isCurrency(col));
+                System.out.println("    isCurrency=" + md.isCurrency(col));
                 System.out.println("    isDefinitelyWritable=" + md.isDefinitelyWritable(col));
-                System.out.println("    isNullable(" + md.isNullable(col));
+                System.out.println("    isNullable=" + md.isNullable(col));
                 System.out.println("    isReadOnly=" + md.isReadOnly(col));
                 System.out.println("    isSearchable=" + md.isSearchable(col));
                 System.out.println("    isSigned=" + md.isSigned(col));

@@ -6,11 +6,13 @@ GRANT ALL PRIVILEGES ON test.* TO 'tester'@'localhost';
 
 USE test;
 
-CREATE TABLE points 
+DROP TABLE IF EXISTS `points`;
+
+CREATE TABLE `points` 
 ( 
 	id int NOT NULL AUTO_INCREMENT, 
-	x int, 
-	y int, 
+	x  int, 
+	y  int, 
 	PRIMARY KEY (id)
 );
 
@@ -21,5 +23,21 @@ INSERT INTO points (x,y) VALUES (0,10);
 
 
 SELECT x,y FROM points;
+
+----------------------------------------------------
+
+DROP TABLE IF EXISTS `names`;
+
+CREATE TABLE `names`
+( 
+	id   int NOT NULL AUTO_INCREMENT, 
+	name text, 
+	tag  char(10) NOT NULL DEFAULT '0123456789', 
+	PRIMARY KEY (id)
+) DEFAULT CHARSET=utf8;
+
+INSERT INTO names (name)     VALUES ("Alice");
+INSERT INTO names (name,tag) VALUES ("Bob", "1122334455");
+
 
 
