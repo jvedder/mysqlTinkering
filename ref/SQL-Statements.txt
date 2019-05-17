@@ -6,14 +6,16 @@ GRANT ALL PRIVILEGES ON test.* TO 'tester'@'localhost';
 
 USE test;
 
+----------------------------------------------------
+
 DROP TABLE IF EXISTS `points`;
 
 CREATE TABLE `points` 
 ( 
-	id int NOT NULL AUTO_INCREMENT, 
-	x  int, 
-	y  int, 
-	PRIMARY KEY (id)
+  id int NOT NULL AUTO_INCREMENT, 
+  x int, 
+  y int, 
+  PRIMARY KEY (id)
 );
 
 INSERT INTO points (x,y) VALUES (0,0);
@@ -30,14 +32,39 @@ DROP TABLE IF EXISTS `names`;
 
 CREATE TABLE `names`
 ( 
-	id   int NOT NULL AUTO_INCREMENT, 
+	id int NOT NULL AUTO_INCREMENT, 
 	name text, 
-	tag  char(10) NOT NULL DEFAULT '0123456789', 
+	tag char(10) NOT NULL DEFAULT '0123456789', 
 	PRIMARY KEY (id)
 ) DEFAULT CHARSET=utf8;
 
-INSERT INTO names (name)     VALUES ("Alice");
-INSERT INTO names (name,tag) VALUES ("Bob", "1122334455");
+INSERT INTO names (name) VALUES ("Alice");
+INSERT INTO names (name, tag) VALUES ("Bob", "1122334455");
+
+----------------------------------------------------
+
+DROP TABLE IF EXISTS `devices`;
+
+CREATE TABLE `devices` 
+(
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL DEFAULT '',
+  `mac` char(17) NOT NULL DEFAULT '00:00:00:00:00:00',
+  `myBoolean` boolean NOT NULL DEFAULT 0,
+  `myBit1` bit(1) NOT NULL DEFAULT 0, 
+  `myBit4` bit(4) NOT NULL DEFAULT 0,
+  `myDate` date NOT NULL DEFAULT "2000-01-01",
+  `myDateTime` datetime NOT NULL DEFAULT "2000-01-11 00:00:00",
+  `myTime` time NOT NULL DEFAULT "00:00:00",
+  `myTimeStamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
+INSERT INTO devices (name) VALUES ("Harold");
+INSERT INTO devices (name, mac) VALUES ("Edith", "11:22:33:44:55:66");
+
+
+
 
 
 

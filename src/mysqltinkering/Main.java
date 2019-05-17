@@ -1,13 +1,17 @@
 package mysqltinkering;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.Calendar;
 
 /*
  * Docs at https://dev.mysql.com/doc/connectors/en/connector-j-5.1.html
@@ -18,6 +22,8 @@ public final class Main
 
     // NOTE: Do not hard-code passwords as shown here
     private static final String CONN_STRING = "jdbc:mysql://localhost/test?user=tester&password=passfail&useSSL=false";
+    
+    private static final Calendar cal = Calendar.getInstance(); 
 
     public static void main(String[] args) throws Exception
     {
@@ -37,46 +43,46 @@ public final class Main
             // Connect to mysql
             conn = DriverManager.getConnection(CONN_STRING);
 
-            System.out.println("### PREPARE STATEMENT");
-            sql = "INSERT INTO points (x,y) VALUES (?,?);";
-            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            // printResultSetMetaData(pstmt.getMetaData());
-
-            System.out.println("### EXECUTE ");
-            pstmt.setInt(1, 3);
-            pstmt.setInt(2, 3);
-            b = pstmt.execute();
-            System.out.println("execute() return value: " + b);
-
-            System.out.println("### GET RESULT SET");
-            rs = pstmt.getResultSet();
-            printResultSet(rs);
-            if (rs != null) rs.close();
-
-            System.out.println("### GET GENERATED KEYS");
-            rs = pstmt.getGeneratedKeys();
-            printResultSet(rs);
-            if (rs != null) rs.close();
-            
-            pstmt.close();
-
-            System.out.println("### CREATE STATEMENT ");
-            stmt = conn.createStatement();
-            System.out.println("### EXECUTE QUERY:");
-            sql = "SELECT x,y FROM points;";
-            rs = stmt.executeQuery(sql);
-            
-            System.out.println("### RESULT SET:");
-            printResultSet(rs);
-            if (rs != null) rs.close();
-            
-            stmt.close();
+//            System.out.println("### PREPARE STATEMENT");
+//            sql = "INSERT INTO points (x,y) VALUES (?,?);";
+//            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//            // printResultSetMetaData(pstmt.getMetaData());
+//
+//            System.out.println("### EXECUTE ");
+//            pstmt.setInt(1, 3);
+//            pstmt.setInt(2, 3);
+//            b = pstmt.execute();
+//            System.out.println("execute() return value: " + b);
+//
+//            System.out.println("### GET RESULT SET");
+//            rs = pstmt.getResultSet();
+//            printResultSet(rs);
+//            if (rs != null) rs.close();
+//
+//            System.out.println("### GET GENERATED KEYS");
+//            rs = pstmt.getGeneratedKeys();
+//            printResultSet(rs);
+//            if (rs != null) rs.close();
+//            
+//            pstmt.close();
+//
+//            System.out.println("### CREATE STATEMENT ");
+//            stmt = conn.createStatement();
+//            System.out.println("### EXECUTE QUERY:");
+//            sql = "SELECT x,y FROM points;";
+//            rs = stmt.executeQuery(sql);
+//            
+//            System.out.println("### RESULT SET:");
+//            printResultSet(rs);
+//            if (rs != null) rs.close();
+//            
+//            stmt.close();
             
             
             System.out.println("### CREATE STATEMENT 2");
             stmt = conn.createStatement();
             System.out.println("### EXECUTE QUERY 2:");
-            sql = "SELECT * FROM names";
+            sql = "SELECT * FROM devices";
             rs = stmt.executeQuery(sql);
             
             System.out.println("### RESULT SET 2:");
@@ -160,6 +166,18 @@ public final class Main
                         case Types.VARCHAR:
                             String s = rs.getString(col);
                             System.out.print(s);
+                            break; 
+                        case Types.DATE:
+                            Date dt = rs.getDate(col,cal);
+                            System.out.print(dt.toString());
+                            break; 
+                        case Types.TIME:
+                            Time tm = rs.getTime(col,cal);
+                            System.out.print(tm);
+                            break; 
+                        case Types.TIMESTAMP:
+                            Timestamp ts = rs.getTimestamp(col,cal);
+                            System.out.print(ts);
                             break; 
                         default:
                             System.out.print("[Type " + md.getColumnType(col) + "]");
